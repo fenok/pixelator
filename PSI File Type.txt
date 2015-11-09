@@ -1,0 +1,68 @@
+Pixelated Simple Image File Type (PSI)
+
+    The files of this type are used to store images for LEM1802 monitor.
+
+    [!] To clear things up: in this document "should" means just a
+recommendation, whereas "must" means imperative.
+
+    Please also notice, that grammar here may be far from good. Sorry.
+
+    File structure (size is given in words, total size is 673 words):
+    +------+-------------------+
+    | Size | Name              |
+    +------+-------------------+
+    | 1    | magic_number      |
+    +------+-------------------+
+    | 15   | file_name         |
+    +------+-------------------+
+    | 2    | background_symbol |
+    +------+-------------------+
+    | 254  | image_font        |
+    +------+-------------------+
+    | 16   | image_palette     |
+    +------+-------------------+
+    | 1    | border_color      |
+    +------+-------------------+
+    | 384  | video_ram         |
+    +------+-------------------+
+
+1) magic_number
+    The magic number is 0x5034. It defines the file's type as PSI.
+
+2) file_name
+    Defines the file's original name (independent from the File System).
+Allowed characters: 0x20 - 0x7e (ASCII). The maximum length of the name is 15
+characters, any unused characters at the end of the name must be set to null.
+The minimum length of the name is 0 characters, which means that there is no
+original name.
+
+3) background_symbol
+    Defines a symbol which is used as background for the image. It should be
+null (but can be any symbol).
+
+4) image_font
+    Defines 127 symbols (2 words per symbol). These symbols are divided into 
+USED and UNUSED.
+    USED symbols have at least one location on the screen. USED symbols must be
+unique. USED symbols must be not null.
+    UNUSED symbols do not have any locations on the screen. UNUSED symbols must
+be null.
+
+5) image_palette
+    Defines 16 colors. The first color should be contrast to the sixteenth.
+In other words, the "black-by-default" color should be contrast to the
+"white-by-default" one.
+
+6) border_color
+    Defines the number of border color. The number refers to image_palette.
+
+7) video_ram
+    Defines locations and colors (and blinking) of symbols. There should be one
+USED symbol with only one location OR one UNUSED symbol.
+
+    Additional information can be found in LEM1802's documentation ("Font ram",
+"Palette ram" and "Video ram" sections). The documentation can be found here:
+http://dcpu.com/monitor/
+
+Fen-ok (http://0x10cforum.com/profile/4855939)
+27 July 2013

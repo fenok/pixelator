@@ -1,0 +1,187 @@
+           PIXELATOR            
+      Per-pixel image editor    
+             v.3.0.             
+      Controls description      
+--------------------------------
+0.MAIN MENU                     
+--------------------------------
+-arrow left/right- move         
+                   selection    
+-enter- select                  
+-esc- exit the program          
+--------------------------------
+1.DRAW                          
+--------------------------------
+  An image consists of 128 (max)
+symbols, applied to screen,     
+which has 384 areas and border  
+color. Every area has one       
+symbol, foreground color and    
+background color. It also can   
+blink.                          
+  The first symbol is background
+symbol, which is normally null. 
+When some area's symbol becomes 
+null-symbol, it is replaced with
+background symbol, even if it is
+not actually null. Other 127    
+symbols are directly changeable.
+  'Show number of symbols left' 
+option shows number of unused   
+symbols. It is thought that     
+background symbol is always used
+(even if it is not true). For   
+example, at the beginning this  
+option will show '126', because 
+there will be only two symbols  
+on the screen- background symbol
+and 'currently-being-edited'    
+symbol.                         
+  'Change background symbol'    
+option makes background symbol  
+equal to the current symbol. The
+current symbol is not replaced  
+with background symbol.         
+--------------------------------
+-arrows- move cursor (pixel)    
+-a- draw pixel, can be hold     
+-s- erase pixel, can be hold    
+-q- foreground color up         
+-w- foreground color down       
+-e- background color up         
+-r- background color down       
+-z- apply foreground color, can 
+    be hold                     
+-x- apply background color, can 
+    be hold                     
+-t- make border color equal to  
+    background color            
+-b- make an area blinking/normal
+-l- draw line                   
+-k- draw ellipse                
+-h- show number of symbols left 
+-c- show default font           
+-g- change background symbol    
+-d- enter symbol-drawing mode   
+-esc- return to main menu       
+--------------------------------
+1.1.DRAW LINE                   
+--------------------------------
+-arrows- move the line's end    
+-z- show/hide foreground color  
+-x- show/hide background color  
+-q,w,e,r- change colors         
+-l- finish drawing of line      
+-j- disable drawing of line     
+--------------------------------
+1.2.DRAW ELLIPSE                
+--------------------------------
+  The algorithm currently does  
+not work properly in a lot of   
+cases.                          
+--------------------------------
+-right arrow- enlarge horisont. 
+-left arrow- reduce horisont.   
+-down arrow- enlarge vertical.  
+-up arrow- reduce vertical.     
+-z- show/hide foreground color  
+-x- show/hide background color  
+-q,w,e,r- change colors         
+-k- finish drawing of ellipse   
+-j- disable drawing of ellipse  
+--------------------------------
+1.3.SYMBOL-DRAWING MODE         
+--------------------------------
+  In this mode the current      
+symbol can be applied to any    
+area with background symbol.    
+If the current symbol is null,  
+you can not enter the mode.     
+Colors can not be changed.      
+Background symbol can be applied
+to any area except the original 
+one.                            
+  You exit from this mode to the
+original area, if there are     
+unused symbols. Or, you exit to 
+an area with unique symbol, if  
+there is one. Otherwise you can 
+not exit this mode, but still   
+can return to main menu.        
+  This mode gives possibility to
+overcome restriction of having  
+at least one unique symbol (at  
+least one symbol which is       
+applied to only one area).      
+  'Change the original area'    
+option makes the current area   
+original, and, hence, changes   
+the current symbol. If the      
+current area contains background
+symbol, the option does nothing.
+--------------------------------
+-arrows- move symbol            
+-a- apply symbol                
+-s- apply background symbol     
+-f- change the original area    
+    (and the current symbol)    
+-d- exit from the mode          
+-esc- return to main menu       
+--------------------------------
+2.PALETTE                       
+--------------------------------
+  There are 16 colors. It is    
+highly recommended that black   
+and white colors are still      
+contrast after changing them.   
+--------------------------------
+-arrows- move selection         
+-enter- select                  
+-esc- return to main menu       
+--------------------------------
+2.1.COLOR CHANGING              
+--------------------------------
+-arrow up/down- move selection  
+-arrow left/right- change red,  
+                   green or blue
+                   channel      
+-enter- select ('default' option
+        only)                   
+-esc- exit from changing        
+--------------------------------
+3.DISK                          
+--------------------------------
+  Currently under development.  
+Saving and loading are only     
+possible after loading the File 
+System. Only one file can be    
+saved. The file's type (format) 
+is PSI. File System - PUS. It is
+made just for test.             
+--------------------------------
+-i- load File System (including 
+    file's name)                
+-f- format disk                 
+-s- save file                   
+-l- load file                   
+-esc- return to main menu       
+--------------------------------
+3.1.FILE SAVING                 
+--------------------------------
+  In order to save a file, you  
+must give it a name. Any non-   
+control characters are allowed. 
+The maximum length of the name  
+is 15 characters, the minimum   
+length-0 characters (Untitled). 
+--------------------------------
+-keys- print a character        
+-backspace- remove the last     
+            character           
+-enter- continue saving         
+--------------------------------
+4.CONTROLS                      
+--------------------------------
+-arrow up/down- move text       
+-esc- return to main menu       
+--------------------------------

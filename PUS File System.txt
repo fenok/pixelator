@@ -1,0 +1,23 @@
+PSI Useless Storage File System (PUS)
+
+    It's used to store one PSI file. Phew.
+
+    Structure (size is given in words):
+    +------+--------------+
+    | Size | Name         |
+    +------+--------------+
+    | 1    | magic_number |
+    +------+--------------+
+    | 673  | PSI_file     |
+    +------+--------------+
+
+1) magic_number
+    The magic number is 0xf00f. It defines the file system as PUS.
+
+2) PSI_file
+    Contains PSI file.
+
+    The file system is absolutely useless and is made just for test.
+
+Fen-ok (http://0x10cforum.com/profile/4855939)
+27 July 2013
