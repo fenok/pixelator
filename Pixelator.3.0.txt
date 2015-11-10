@@ -68,7 +68,7 @@
 ;BRUTAL RUSSIAN JUNK CODE BELOW. KEEP OUT.
 ;---------------------
 
-;//ОЧИЩЕНИЕ ПАМЯТИ ОТ ПРЕДЫДУЩИХ ЗАПУСКОВ//
+;//CLEARING MEMORY FROM PREVIOUS RUNS//
 :memory_preparing
 SET J, null_start
 :null_loop
@@ -82,7 +82,7 @@ SET [FIGUREBCOLFLAG], 0x1
 SET [BCOL], 0xf
 SET [BORDERCOL], 0x7
 
-;//ПОЛУЧЕНИЕ УСТРОЙСТВ//
+;//GETTING DEVICES//
 HWN J
 
 :get_devices
@@ -100,7 +100,7 @@ IFE A, 0x24c5
 IFN J, 0x0
     SET PC, get_devices
 
-;//ИНИЦИАЛИЗАЦИЯ МОНИТОРА//
+;//INITIALIZING MONITOR//
 :initialize_monitor
 SET A, 0x0
 SET B, SCREEN
@@ -116,7 +116,7 @@ HWI [MONITOR]
 SET A, 0x2
 HWI [MONITOR]
 
-;//НАЧАЛЬНАЯ ПОДГОТОВКА К РИСОВАНИЮ//
+;//INITIAL PREPARING FOR DRAWING//
 :screen_preparing
 SET J, 0x0
 :prepare_screenmem
@@ -126,11 +126,11 @@ IFN J, 0x180
     SET PC, prepare_screenmem
 SET [WORD0], 0x0
 SET [WORD1], 0x0		
-SET X, 0x0; Координаты пикселя внутри символа
+SET X, 0x0; Pixel's coordinates inside symbol
 SET Y, 0x0;
-SET [IMEM], 0x0; Позиция символа на экране
+SET [IMEM], 0x0; Symbol's position on the screen
 
-;//////////////////////////////////////////ГЛАВНОЕ МЕНЮ/////
+;//////////////////////////////////////////MAIN MENU/////
 :main_menu
 SET A, 0x1
 SET B, FONT
@@ -157,7 +157,7 @@ IFN J, 0x100
 
 ;/////////////	
 SET I, 0xa2 
-SET J, 0x2 ;зеленый цвет
+SET J, 0x2 ;green color
 SHL J, 0x8
 SET [SCREEN+I],J
 
@@ -176,7 +176,7 @@ IFE C, 0x1b
 SET PC, wait_key_press_start  	
 
 :main_choice
-SET J, 0x4 ;красный цвет
+SET J, 0x4 ;red color
 SHL J, 0x8
 SET [SCREEN+I],J
 IFE C, 0x83
@@ -203,7 +203,7 @@ IFE I, 0xb7
     SET PC, show_controls
 SET PC, wait_key_press_start
 
-;//////////////////////////////ВЫВОД УПРАВЛЕНИЯ/////
+;//////////////////////////////SHOWING CONTROLS/////
 :show_controls
 SET A, 0x1
 SET B, 0x0
@@ -270,7 +270,7 @@ IFN Z, 0x180
     SET PC, update_controls_output_loop
 SET PC, POP
 
-;////////////////////////////////////////ДИСК/////
+;////////////////////////////////////////DISK/////
 :disc
 SET A, 0x1
 SET B, 0x0
@@ -334,7 +334,7 @@ HWI [FLOPPY]
 
 SET A, 0x1
 INT A
-;//////////////////////ОТСЛЕЖИВАНИЕ КНОПОК ДЛЯ ДИСКА////
+;//////////////////////DISK: BUTTONS TRACKING////
 :wait_key_press_disc
 SET A, 0x1
 HWI [KEYBOARD]
@@ -372,7 +372,7 @@ SET X, 0x0
 HWI [FLOPPY]
 SET PC, main_menu
 
-;///////////////////СОХРАНЕНИЕ ФАЙЛА/////
+;///////////////////FILE'S SAVING/////
 :disc_save
 IFN [DISCFSCODE], 0x1
     SET PC, POP
@@ -446,7 +446,7 @@ JSR output_discmsg
 JSR output_discerror
 SET PC, POP
 
-;///////////////////ВВОД ИМЕНИ ФАЙЛА//////
+;///////////////////FILE NAME INPUT//////
 :get_filename
 SET J, 0x0
 :null_filename_loop
@@ -464,7 +464,7 @@ XOR [SCREEN+Z], 0x80
 :wait_key_press_get_name
 SET A, 0x1
 HWI [KEYBOARD]
-;//////отслеживание буквенно-цифровых символов, "_", ".". Может пригодится потом
+;//////tracking alphanumeric symbols, "_", ".". May have a use later
 ;IFG C, 0x2f
 ;    IFL C, 0x3a
 ;        JSR add_letter
@@ -517,7 +517,7 @@ BOR [SCREEN+Z], 0x5f
 XOR [SCREEN+Z], 0x80
 SET PC, POP
 
-;///////////////////ЗАГРУЗКА ФАЙЛА/////
+;///////////////////FILE'S LOADING/////
 :disc_load
 IFN [DISCFSCODE], 0x1
     SET PC, POP
@@ -634,7 +634,7 @@ SET [IMEM], J
 SET [SMBMODEFLAG], 0x0
 SET PC, load_end
 
-;//////////////////////ВЫБОР ФАЙЛОВ И ПАПОК И Т.Д. (на будущее)/////////
+;//////////////////////CHOOSING FILES, DIRECTORIES, ETC (for future)/////////
 :disc_choice_right
 SET PC, POP
 
@@ -650,7 +650,7 @@ SET PC, POP
 :disc_choose_selection
 SET PC, POP
 
-;/////////////////////////ЗАГРУЗКА И ВЫВОД ФАЙЛОВОЙ СИСТЕМЫ (без файлов-папок)/////
+;/////////////////////////LOADING AND OUTPUT THE FILESYSTEM (without files-directories)/////
 :get_and_output_discfs
 SET A, 0x2
 SET X, 0x0
@@ -675,7 +675,7 @@ JSR output_discmsg
 JSR output_discerror
 SET PC, POP
 
-;/////////////////////ВЫВОД СООБЩЕНИЯ ДИСКА///////////
+;/////////////////////OUTPUTTING DISK MESSAGE///////////
 :output_discmsg
 SET Z, 0x16c
 :null_error_output_loop
@@ -695,7 +695,7 @@ IFN Z, 0x16c
     SET PC, output_discmsg_loop
 SET PC, POP
 
-;///////////////////ВЫВОД ОШИБКИ ДИСКА//////////
+;///////////////////OUTPUTTING DISK ERROR//////////
 :output_discerror
 SET J, [DISCERRORCODE]
 MUL J, 0x14
@@ -710,7 +710,7 @@ IFN Z, 0x180
 SET [DISCERRORCODE], 0x0
 SET PC, POP
 
-;///////////////////ВЫВОД ФАЙЛОВОЙ СИСТЕМЫ (без файлов-папок)////
+;///////////////////OUTPUTTING THE FILESYSTEM (without files-directories)////
 :output_discfs
 SET J, [DISCFSCODE]
 MUL J, 0x14
@@ -724,7 +724,7 @@ IFN Z, 0x40
     SET PC, output_discfs_loop
 SET PC, POP
 
-;///////////////////ВЫВОД СОСТОЯНИЯ ДИСКА//////
+;///////////////////OUTPUTTING DISK STATE//////
 :output_discstate
 SET J, [DISCSTATECODE]
 MUL J, 0x14
@@ -738,7 +738,7 @@ IFN Z, 0x20
     SET PC, output_discstate_loop
 SET PC, POP
 
-;///////////////////ОБРАБОТКА ПРЕРЫВАНИЯ ДЛЯ ДИСКА////
+;///////////////////HANDLING DISK INTERRUPT////
 :disc_interrupt
 IFN A, 0x1
     SET PC, exit_interrupt
@@ -762,7 +762,7 @@ IFE B, 0x0
     JSR clear_discfs
 SET PC, POP
 
-;//////////////////////УДАЛЕНИЕ С ЭКРАНА ФАЙЛОВОЙ СИСТЕМЫ (с файлами-папками)////
+;//////////////////////DELETING THE FILESYSTEM FROM THE SCREEN (with files-directories)////
 :clear_discfs
 SET [DISCFSCODE], 0x0
 SET Z, 0x2c
@@ -779,7 +779,7 @@ IFN Z, 0x140
     SET PC, clear_filenames_loop
 SET PC, POP
 
-;////////////////////ОЧИЩЕНИЕ БУФЕРА ДЛЯ ДИСКА/////
+;////////////////////CLEARING DISK BUFFER/////
 :clear_buf
 SET J, 0x0
 :clear_buf_loop
@@ -789,7 +789,7 @@ IFN J, 0x200
     SET PC, clear_buf_loop
 SET PC, POP
 
-;////////////////////ФОРМАТИРОВАНИЕ ДИСКА/////////
+;////////////////////DISK FORMATING/////////
 :format_disc
 SET [DISCMSGCODE], 0x4
 JSR output_discmsg
@@ -816,7 +816,7 @@ JSR output_discmsg
 JSR output_discerror
 SET PC, POP
 
-;///////////////////ЗАГРУЗКА И ВЫВОД ВСЕЙ ФАЙЛОВОЙ СИСТЕМЫ/////
+;///////////////////LOADING AND OUTPUT THE WHOLE FILE SYSTEM/////
 :disc_get_info
 SET [DISCMSGCODE], 0x5
 JSR output_discmsg
@@ -841,7 +841,7 @@ IFN [DISCBUF+J], 0x0
     SET PC, output_names_loop
 SET PC, POP
 
-;//////////////////////////////////ПАЛИТРА////////////
+;//////////////////////////////////PALETTE////////////
 :change_palette
 SET A, 0x2
 SET B, PALETTE
@@ -871,8 +871,8 @@ SET I, 0x0
 SET [COUNTER0], 0x0
 JSR palette_activate
 
-;На разных эмуляторах по-разному, иногда срабатывает enter
-;Очищаем клавиатуру во избежание
+;Different emulators behave differently, sometimes enter is triggered
+;Clearing keyboard to avoid that
 SET A, 0x0
 HWI [KEYBOARD]
 
@@ -1220,7 +1220,7 @@ SET I, [DP]
 SET PC, wait_key_press_palette
 
 
-;//////////////////////////РИСОВАНИЕ////////////////
+;//////////////////////////DRAWING////////////////
 :begin_drawing
 SET A, 0x2
 SET B, PALETTE
@@ -1244,9 +1244,9 @@ ADD J, 0x1
 IFN J, 0x100
     SET PC, restore_font		
 
-SET X, [XMEM]; Координаты пикселя внутри символа
+SET X, [XMEM]; Pixel's coordinates inside symbol
 SET Y, [YMEM];
-SET I, [IMEM]; Позиция символа на экране
+SET I, [IMEM]; Symbol's position on the screen
 
 IFE [SMBMODEFLAG], 0x1
     SET PC, mode_income
@@ -1259,26 +1259,26 @@ JSR update_symbol
 JSR set_colors
 JSR create_cursor_pixel
 
-;//ОТСЛЕЖИВАНИЕ НАЖАТЫХ КНОПОК
+;//TRACKING PRESSED BUTTONS
 :key_press
 SET A, 0x2
 SET B, [DRAWBUTTON]
-SUB B, 0x20;//перевод в верхний регистр
+SUB B, 0x20;//to upper
 HWI [KEYBOARD]
 IFE C, 0x0
     SET [DRAWFLAG], 0x0		
 SET B, [ERAISEBUTTON]
-SUB B, 0x20;//перевод в верхний регистр
+SUB B, 0x20;//to upper
 HWI [KEYBOARD]
 IFE C, 0x0
     SET [ERAISEFLAG], 0x0	
 SET B, [APPLYFCOL]
-SUB B, 0x20;//перевод в верхний регистр
+SUB B, 0x20;//to upper
 HWI [KEYBOARD]
 IFE C, 0x0
     SET [APPLYFCOLFLAG], 0x0
 SET B, [APPLYBCOL]
-SUB B, 0x20;//перевод в верхний регистр
+SUB B, 0x20;//to upper
 HWI [KEYBOARD]
 IFE C, 0x0
     SET [APPLYBCOLFLAG], 0x0	
@@ -1330,7 +1330,7 @@ IFE C, [BCOLDOWN]
     JSR bcolor_up
 IFE C, [BORDCOLCH]
     JSR border_color_up
-;кривоватый момент. нужно, чтобы курсор не вис при достижении лимита символов
+;crooked thing. we need to prevent cursor from being freezed on reaching the limit of symbols
 IFE C, 0x0
     SET PC, key_press
 IFE [SPACEEXISTFLAG], 0x1
@@ -1356,7 +1356,7 @@ IFN J, 0x100
     SET PC, copy_font_return
 SET PC, main_menu
 
-;/////////////////ИЗМЕНЕНИЕ ФОНОВОГО СИМВОЛА///
+;/////////////////CHANGING THE BACKGROUND SYMBOL///
 :change_null_smb
 SET J, 0x1
 SET [FONTMEMTWO], [WORD0]
@@ -1365,7 +1365,7 @@ SET [FONTMEMTWO+J], [WORD1]
 SET [FONT+J], [WORD1]
 SET PC, POP
 
-;////////////////ПОКАЗАТЬ ИСТИННОЕ ЛИЦО////
+;////////////////SHOW THE TRUE FACE (DEFAULT FONT)////
 :show_default_font
 SET A, 0x1
 SET B, 0x0
@@ -1378,7 +1378,7 @@ SET B, FONT
 HWI [MONITOR]
 SET PC, key_press
 
-;///////////////РЕЖИМ ПОСИМВОЛЬНОГО РИСОВАНИЯ/////
+;///////////////SYMBOL-DRAWING MODE/////
 :change_mode
 SET [SMBMODEFLAG], 0x1
 SET [ZMEM], Z
@@ -1585,14 +1585,14 @@ JSR create_cursor_pixel
 SET [SMBMODEFLAG], 0x0
 SET PC, key_press
 
-;////////////////////УСТАНОВКА МЕРЦАНИЯ////
+;////////////////////SETTING BLINKING////
 :set_blinking
 XOR [SCREEN+I], 0x80
 XOR [SCREENMEM+I], 0x80
 SET PC, POP
 
-;///ВЫВОД КОЛ-ВА СВОБОДНЫХ СИМВОЛОВ
-;Сохраняет три первых позиции экрана, очищает их, находит свободные символы, заносит в них цифры, выводит эти цифры на экран до нажатия любой кнопки, после чего очищает "цифровые" символы и восстанавливает экран.
+;///OUTPUTTING COUNT OF FREE SYMBOLS
+;Saving the first three positions of the screen, clearing them, finding free symbols, writing digits to them, outputting these digits on the screen untill any key is pressed, then clearing "digital" symbols and restoring the screen.
 :output_space
 SET J, 0x1
 SET [UNIT], 0x0
@@ -1735,19 +1735,19 @@ SET [FONT+J], [CUSTOMNUMBERS+C]
 SET J, [DP]
 SET PC, wait_key_press
 
-;///УСТАНОВКА ФЛАГА ДЛЯ ДЛИТЕЛЬНОГО ПРИМЕНЕНИЯ ЦВЕТА ПЕРЕДНЕГО ФОНА
+;///SETTING FLAG FOR CONTINIOUS APPLYING OF FOREGROUND COLOR
 :set_fcolor_flag
 SET [APPLYFCOLFLAG], 0x1
 JSR apply_fcolor
 SET PC, POP
 
-;///УСТАНОВКА ФЛАГА ДЛЯ ДЛИТЕЛЬНОГО ПРИМЕНЕНИЯ ЦВЕТА ЗАДНЕГО ФОНА
+;///SETTING FLAG FOR CONTINIOUS APPLYING OF BACKGROUND COLOR
 :set_bcolor_flag
 SET [APPLYBCOLFLAG], 0x1
 JSR apply_bcolor
 SET PC, POP
 
-;///ПРИМЕНЕНИЕ ЦВЕТА ЗАДНЕГО ФОНА 
+;///APPLYING BACKGROUND COLOR 
 :apply_bcolor
 SET J, [SCREENMEM+I]
 SHR J, 0xc
@@ -1760,7 +1760,7 @@ BOR [SCREENMEM+I], J
 SHR [BCOL], 0x8
 SET PC, POP
 
-;///ПРИМЕНЕНИЕ ЦВЕТА ПЕРЕДНЕГО ФОНА
+;///APPLYING FOREGROUND COLOR
 :apply_fcolor
 SET J, [FCOL]
 SHL J, 0xc
@@ -1769,7 +1769,7 @@ SHR [SCREENMEM+I], 0x4
 BOR [SCREENMEM+I], J
 SET PC, POP
 
-;///УСТАНОВКА ФЛАГА ДЛИТЕЛЬНОГО СТИРАНИЯ
+;///SETTING FLAG FOR CONTINIOUS ERASING
 :set_erase_flag
 SET [ERAISEFLAG], 0x1
 SET [DRAWFLAG], 0x0
@@ -1779,7 +1779,7 @@ XOR [WORD0], [PIXWORD0]
 XOR [WORD1], [PIXWORD1]
 SET PC, POP
 
-;///УСТАНОВКА ФЛАГА ДЛИТЕЛЬНОГО РИСОВАНИЯ
+;///SETTING FLAG FOR CONTINIOUS DRAWING
 :set_draw_flag
 SET [DRAWFLAG], 0x1
 SET [ERAISEFLAG], 0x0
@@ -1787,7 +1787,7 @@ BOR [WORD0], [PIXWORD0]
 BOR [WORD1], [PIXWORD1]
 SET PC, POP
 
-;///СМЕНА ЦВЕТА ГРАНИЦЫ//
+;///CHANGING BORDER COLOR//
 :border_color_up
 SET [BORDERCOL], [BCOL]
 SET A, 0x3
@@ -1795,7 +1795,7 @@ SET B, [BORDERCOL]
 HWI [MONITOR]
 SET PC, POP
 
-;///ИЗМЕНЕНИЕ ЦВЕТА ЗАДНЕГО ФОНА
+;///CHANGING BACKGROUND COLOR
 :bcolor_up
 SET J, [BCOL]
 IFE C, [BCOLUP]
@@ -1812,7 +1812,7 @@ SHL J, 0xc
 BOR [SCREEN+I], J
 SET PC, POP
 
-;/////ИЗМЕНЕНИЕ ЦВЕТА СИМВОЛА/////
+;/////CHANGING FOREGROUND COLOR/////
 :fcolor_up
 SET J, [FCOL]
 IFE C, [COLUP]
@@ -1838,9 +1838,9 @@ IFE J, 0x0
 SUB J, 0x1
 SET PC, POP
 
-;//РИСОВАНИЕ ФИГУР
-;Идея: координаты изменяются внутри функции, из неё вызывается drawline. Курсор сохраняет за собой отдельный символ, это учитывается в putpixel. Курсор не меняет позиции во время рисования. Перед рисованием каждой новой линии экран и шрифт восстанавливаются из памяти. При выходе из функции экран и шрифт копируются в память
-;Это универсальная подготовка для рисования любой фигуры
+;//DRAWING FIGURES
+;Idea: coordinates are changing inside the function, 'drawline' is called from within. Cursor reserve separate symbol, it is considered in 'putpixel'. Cursor does not change its position during drawing. Before drawing each new line the sreen and font are restored from memory. On exit from the function the screen and font are copied into memory
+;This is a universal preparation for drawing any figure
 :draw_figure
 JSR clear_symbol
 SET [APPLYFCOLFLAG], 0x0
@@ -1898,10 +1898,10 @@ JSR set_colors
 JSR create_cursor_pixel
 SET PC, POP
 
-;///РИСОВАНИЕ ЭЛЛИПСА
-;из-за переполнения большой эллипс - не совсем эллипс
-;LINEX0, Y0 - хранят координаты центра
-;LINEX1, Y1 - через них вычисляем a,b
+;///DRAWING ELLIPSE
+;due to overflow, big ellipse is not an ellipse actually
+;LINEX0, Y0 - store coordinates of the center
+;LINEX1, Y1 - used to calculate a, b
 ;DELTAX, Y - a, b
 :draw_ellips
 IFN [LINEX0], [LINEX1]
@@ -2121,8 +2121,8 @@ ADD [COL], 0x1
 SET PC, loop_ellips
 
 ;////////////
-;///РИСОВАНИЕ ЛИНИИ
-;из linex,y0 в linex,y1
+;///DRAWING LINE
+;from linex,y0 to linex,y1
 
 :change_line_right
 IFE [LINEX1], 0x7f
@@ -2205,10 +2205,10 @@ SUB [DELTAY], [LINEY0]
 SET J, [DELTAY]
 AND J, 0x8000
 IFN J, 0x8000
-    SET PC, calculate_deltax;значит число +
-;BOR Z, 0x2; то есть dy=-
+    SET PC, calculate_deltax;means the number is +
+;BOR Z, 0x2; means dy=-
 SET [LINEYADDER], 0xffff
-SUB [DELTAY], 0x1;дополнительный код, переводим в +
+SUB [DELTAY], 0x1;twoвЂ™s complement, converting to +
 XOR [DELTAY], 0xffff;
 ;
 :calculate_deltax
@@ -2217,10 +2217,10 @@ SUB [DELTAX], [LINEX0]
 SET J, [DELTAX]
 AND J, 0x8000
 IFN J, 0x8000
-    SET PC, continue_line;значит число +
-;BOR Z, 0x1;то есть dx=-
+    SET PC, continue_line;means the number is +
+;BOR Z, 0x1;means dx=-
 SET [LINEXADDER], 0xffff
-SUB [DELTAX], 0x1;дополнительный код, переводим в +
+SUB [DELTAX], 0x1;twoвЂ™s complement, converting to +
 XOR [DELTAX], 0xffff;
 :continue_line
 IFE [DELTAY], 0x0
@@ -2291,7 +2291,7 @@ SET Y, [LINEX]
 JSR putpixel
 SET PC, POP
 
-;//ОЧИЩЕНИЕ ЭКРАНА (очищение экрана от текущей фигуры)
+;//CLEARING SCREEN (clearing screen from current figure)
 :load_screen
 SET J, 0x0
 :update_screen
@@ -2313,8 +2313,8 @@ IFN J, 0x80
     SET PC, update_fontmemmem
 SET PC, POP
 
-;//РИСОВАНИЕ ПИКСЕЛЯ ПО КООРДИНАТАМ
-;Координаты поставляются в регистрах X, Y, внутри функции переводятся в тройку X, Y, I. Кроме того портится и Z. Соответственно, все 4 регистра портятся и должны быть сохранены до вызова
+;//PUTTING PIXEL TO COORDINATES
+;Coordinates are transfered in X, Y registers, within the function they are converting into trio 'X, Y, I'. Besides that, Z register also becomes spoiled. Respectively, all 4 registers becomes spoiled and must be saved before function call
 :putpixel
 IFL X, 0x0
     SET PC, POP
@@ -2372,7 +2372,7 @@ IFN [ZMEMTWO], Z
 SET [DRAWFLAG], 0x0
 SET PC, POP
 
-;//////ОБРАБОТКА СТРЕЛКИ ВВЕРХ////////////
+;//////PROCESSING UP ARROW////////////
 :up
 IFL I, 0x20
     IFE Y, 0x0
@@ -2404,7 +2404,7 @@ ADD I, 0x20
 SET Z, [ZMEM]
 SET PC, continue_up
 
-;//////ОБРАБОТКА СТРЕЛКИ ВЛЕВО////////////
+;//////PROCESSING LEFT ARROW////////////
 :left
 IFE I, 0x0
     IFE X, 0x0
@@ -2436,7 +2436,7 @@ ADD I, 0x1
 SET Z, [ZMEM]
 SET PC, continue_left
 
-;/////////ОБРАБОТКА СТРЕЛКИ ВНИЗ//////////
+;/////////PROCESSING DOWN ARROW//////////
 :down
 IFG I, 0x15f
     IFE Y, 0x7
@@ -2469,7 +2469,7 @@ SUB Y, 0x1
 SET Z, [ZMEM]
 SET PC, continue_down
 
-;///////ОБРАБОТКА СТРЕЛКИ ВПРАВО///////
+;///////PROCESSING RIGHT ARROW///////
 :right
 IFE I, 0x17f
     IFE X, 0x3
@@ -2502,7 +2502,7 @@ SUB X, 0x1
 SET Z, [ZMEM]
 SET PC, continue_right
 
-;///УСТАНОВКА ЦВЕТОВ ТЕКУЩЕМУ МЕСТУ
+;///SETTING COLORS TO CURRENT AREA (SPOT)
 :set_colors
 SHL [SCREEN+I], 0x8
 SHR [SCREEN+I], 0x8
@@ -2514,7 +2514,7 @@ SHL J, 0xc
 BOR [SCREEN+I], J
 SET PC, POP
 
-;//ПРОВЕРКА ПОКИДАЕМОГО СИМВОЛА, ИЗМЕНЕНИЕ FONTMEM, ПРИВЯЗКА СИМВОЛА К МЕСТУ НА ЭКРАНЕ, ОЧИЩЕНИЕ СИМВОЛА ОТ КУРСОРА//
+;//CHECKING THE SYMBOL THAT WE ARE ABOUT TO LEAVE, CHANGING 'FONTMEM', BINDING SYMBOL TO A SCREEN'S AREA (SPOT), CLEARING SYMBOL FROM CURSOR//
 :leave_symbol
 IFE [WORD0], 0x0
     IFE [WORD1], 0x0
@@ -2561,7 +2561,7 @@ ADD Z, 0x1
 SET [FONT+Z], 0x0
 SET PC, POP
 
-;//СУТЬ - НАХОЖДЕНИЕ НОВОГО Z. С ИЗМЕНЕНИЕМ FONTMEM, ПРИВЯЗКОЙ НОВОГО СИМВОЛА И Т.Д.//
+;//GIST - FINDING NEW 'Z'. WITH 'FONTMEM' CHANGING, BINDING NEW SYMBOL, ETC.//
 :find_place
 SET J, [SCREEN+I]
 SHL J, 0x9
@@ -2607,7 +2607,7 @@ SET PC, POP
 SET [SPACEEXISTFLAG], 0x0
 SET PC, POP
 
-;//////ВОССТАНОВЛЕНИЕ ТЕКУЩЕГО СИМВОЛА//////
+;//////RESTORING CURRENT SYMBOL//////
 :clear_symbol
 SET [FONT+Z], [WORD0]
 ADD Z, 0x1
@@ -2615,7 +2615,7 @@ SET [FONT+Z], [WORD1]
 SUB Z, 0x1
 SET PC, POP
 
-;/////ЗАНЕСЕНИЕ В ПАМЯТЬ НОВОГО СИМВОЛА/////
+;/////ADDING NEW SYMBOL TO MEMORY/////
 :update_symbol
 SET [WORD0], [FONT+Z]
 ADD Z, 0x1
@@ -2623,7 +2623,7 @@ SET [WORD1], [FONT+Z]
 SUB Z, 0x1
 SET PC, POP
 
-;//СОЗДАНИЕ ПИКСЕЛЯ-КУРСОРА ПО КООРДИНАТАМ, ДЕЙСТВИЯ В СООТВЕТСТВИИ С ФЛАГАМИ РИСОВАНИЯ/СТИРАНИЯ И ФЛАГАМИ ПРИМЕНЕНИЯ ЦВЕТОВ////
+;//CREATING PIXEL-CURSOR BY COORDINATES, ACTIONS ACCORDING TO FLAGS (DRAWING/ERASING/COLOR APPLYING)////
 :create_cursor_pixel
 SET [PIXWORD0], 0x0
 SET [PIXWORD1], 0x0
@@ -2684,74 +2684,74 @@ SET PC, POP
 SET [PIXWORD1], 0x1
 SHL [PIXWORD1], Y
 SET PC, POP
-;Переменные
+;Variables
 ;/////////////////////////////////////////////
-:CHANGEMODE DAT 0x64 ; Клавиша смены режима (d)
-:CHANGESYMBOL DAT 0x66; Клавиша смены символа в режиме символа (f)
-:DRAWBUTTON DAT 0x61;Клавиша прод. рисования(a)
-:ERAISEBUTTON DAT 0x73;Клавиша прод. стирания(s)
-:COLUP DAT 0x71;Клавиша цвет-вверх (q)
-:COLDOWN DAT 0x77;Клавиша цвет-вниз (w)
-:BCOLUP DAT 0x65;Клавиша фон-цвет-вверх (e)
-:BCOLDOWN DAT 0x72; Клавиша фон-цвет-вниз (r)
-:APPLYFCOL DAT 0x7a;Клавиша-применить цвет(z)
-:APPLYBCOL DAT 0x78;Клавиша-применить цв.фона(x)
-:BORDCOLCH DAT 0x74;Клавиша смены цвета границы (t)
-:BLINK DAT 0x62; Клавиша мерцания (b)
-:DEFFONT DAT 0x63;ПОКАЗАТЬ ИСТИННОЕ ЛИЦО(c)
-:LINE DAT 0x6c;Рисовка линии(l)
-:ELLIPS DAT 0x6b;Клавиша рисования эллипса (k)
-:UNDO DAT 0x6a; Клавиша отмены рисования фигуры (j)
-:CHANGENULLSMB DAT 0x67; Клавиша смены нулевого (фонового) символа (g)
-:SPACEBUTTON DAT 0x68;клавиша вывода кол-ва оставшихся символов(h)
-:FORMAT DAT 0x66;Клавиша форматирования диска (f)
-:INFO DAT 0x69; Клавиша получения информации о диске (i)
-:LOAD DAT 0x6c; Клавиша загрузки (l)
-:SAVE DAT 0x73; Клавиша сохранения (s)
-:DELETE DAT 0x64; Клавиша удаления (d)
+:CHANGEMODE DAT 0x64 ; Key - changing the mode (d)
+:CHANGESYMBOL DAT 0x66; Key - changing symbol in symbol-drawing mode (f)
+:DRAWBUTTON DAT 0x61;Key - continious drawing (a)
+:ERAISEBUTTON DAT 0x73;Key - continious erasing (s)
+:COLUP DAT 0x71;Key - fcolor-up (q)
+:COLDOWN DAT 0x77;Key - fcolor-down (w)
+:BCOLUP DAT 0x65;Key - bcolor-up (e)
+:BCOLDOWN DAT 0x72; Key - bcolor-down (r)
+:APPLYFCOL DAT 0x7a;Key-apply fcolor(z)
+:APPLYBCOL DAT 0x78;Key-apply bcolor(x)
+:BORDCOLCH DAT 0x74;Key - change border color (t)
+:BLINK DAT 0x62; Key - blinking (b)
+:DEFFONT DAT 0x63;SHOW THE TRUE FACE(c)
+:LINE DAT 0x6c;Key - line drawing(l)
+:ELLIPS DAT 0x6b;Key - ellipse drawing (k)
+:UNDO DAT 0x6a; Key - cancel figure drawing (j)
+:CHANGENULLSMB DAT 0x67; Key - change null (background) symbol (g)
+:SPACEBUTTON DAT 0x68;Key - output count of free symbols(h)
+:FORMAT DAT 0x66;Key - format disk (f)
+:INFO DAT 0x69; Key - getting disk info (i)
+:LOAD DAT 0x6c; Key - load (l)
+:SAVE DAT 0x73; Key - save (s)
+:DELETE DAT 0x64; Key - delete (d)
 :null_start
-:WORD0 DAT 0x0; Слова для хранения символа
+:WORD0 DAT 0x0; Words - symbol's storage
 :WORD1 DAT 0x0;
-:PIXWORD0 DAT 0x0;Слова хранения симв. пикселя
+:PIXWORD0 DAT 0x0;Words - pixel's symbol storage
 :PIXWORD1 DAT 0x0;
 :MONITOR DAT 0x0
 :KEYBOARD DAT 0x0
 :FLOPPY DAT 0x0
-:ZMEM DAT 0x0; Хранит зн. текущего-прошлого Z
+:ZMEM DAT 0x0; Stores value of current-past Z
 :ZMEMTWO DAT 0x0
 :XMEM DAT 0x0
 :YMEM DAT 0x0
 :IMEM DAT 0x0
-:BORDERCOL DAT 0x0; Цвет границы монитора
-:FCOL DAT 0x0;Текущий цвет переднего фона
-:BCOL DAT 0xf;Текущий цвет заднего фона
-:DRAWFLAG DAT 0x0;Флаг длительного рисования
-:ERAISEFLAG DAT 0x0;Флаг длительного стирания
-:SPACEEXISTFLAG DAT 0x1;Есть ли место для симв.
-:FIGUREFCOLFLAG DAT 0x1;Флаг, определяющий, применится ли цвет переднего фона после рисования фигуры
-:FIGUREBCOLFLAG DAT 0x1;аналогично
-:APPLYFCOLFLAG DAT 0x0;Флаг прод. применения
-:APPLYBCOLFLAG DAT 0x0;Флаг прод. применения
-:SMBMODEFLAG DAT 0x0; Флаг доп. режима (1-есть)
-:UNIT DAT 0x0;подсчет единиц
-:DECADE DAT 0x0;десятков
-:CENTURY DAT 0x0;сотен для вывода десятичного числа
-:THREESCRMEM DAT 0 0 0;хранит первые три области экрана
+:BORDERCOL DAT 0x0; Border color
+:FCOL DAT 0x0;Current foreground color
+:BCOL DAT 0xf;Current background color
+:DRAWFLAG DAT 0x0;Flag - continious drawing
+:ERAISEFLAG DAT 0x0;Flag - continious erasing
+:SPACEEXISTFLAG DAT 0x1;Flag - whether there is a place for symbol
+:FIGUREFCOLFLAG DAT 0x1;Flag - whether foreground color will apply after figure drawing
+:FIGUREBCOLFLAG DAT 0x1;similarly
+:APPLYFCOLFLAG DAT 0x0;Flag - cont. applying
+:APPLYBCOLFLAG DAT 0x0;Flag - cont. applying
+:SMBMODEFLAG DAT 0x0; Flag - symb. mode (1-yes)
+:UNIT DAT 0x0;counting units
+:DECADE DAT 0x0;decades
+:CENTURY DAT 0x0;centuries for decimal number outputting
+:THREESCRMEM DAT 0 0 0;stores the first three areas (spots) of the screen
 :CENTURYFONTNUM DAT 0x0
 :DECADEFONTNUM DAT 0x0
 :UNITFONTNUM DAT 0x0
-:COL DAT 0x0;это
-:DP DAT 0x0;все ; также используется для кратковременного хранения других данных
-:ROW DAT 0x0;для
-:ASQR DAT 0x0;эллипса
-:BSQR DAT 0x0;сложного
-:TWOASQR DAT 0x0;противного
-:TWOBSQR DAT 0x0;эллипса
-:FOURASQR DAT 0x0;и это
-:FOURBSQR DAT 0x0;тоже
-:LINEX0 DAT 0x0;От x0,y0 до x1, y1 рисуется линия
-:LINEY0 DAT 0x0;вообще отсюда и ниже - для линии или для общего
-:LINEX1 DAT 0x0;использования фигурами
+:COL DAT 0x0;this
+:DP DAT 0x0;all ; also used as temporary storage for other data
+:ROW DAT 0x0;for
+:ASQR DAT 0x0;ellipse
+:BSQR DAT 0x0;complicated
+:TWOASQR DAT 0x0;nasty
+:TWOBSQR DAT 0x0;ellipse
+:FOURASQR DAT 0x0;and this
+:FOURBSQR DAT 0x0;too
+:LINEX0 DAT 0x0;From x0,y0 to x1, y1 - drawing line
+:LINEY0 DAT 0x0;generally, from here and below - for line or generic figure
+:LINEX1 DAT 0x0;stuff
 :LINEY1 DAT 0x0;
 :LINEX DAT 0x0
 :LINEY DAT 0x0
@@ -2759,21 +2759,21 @@ SET PC, POP
 :DELTAY DAT 0x0
 :ERROR DAT 0x0
 :DELTAERROR DAT 0x0
-:REVLINEFLAG DAT 0x0;0-наклон меньше 45 градусов
+:REVLINEFLAG DAT 0x0;0-incline is less than 45 degrees
 :LINECHECKER DAT 0x0
 :LINEXADDER DAT 0x0
 :LINEYADDER DAT 0x0
-;Запоминает, сколько раз определенный символ встречается на экране. Нулевой - фон
+;Stores, how many times particular symbol is presented on the screen. Null - background
 :FONTMEM DAT 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-;С названиями беда. Это копия FONTMEM. Для восстановления.
+;Bad name actually. It is a copy of 'FONTMEM'. For restoration.
 :FONTMEMMEM DAT 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-;Шрифт
+;Font
 :FONT DAT 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-;Копия шрифта
+;Font copy
 :FONTMEMTWO DAT 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-;"Видеопамять"
+;"Videoram"
 :SCREEN DAT 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-;Копия "видеопамяти". Надо.
+;Copy of "videoram". Yes we need it.
 :SCREENMEM DAT 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 ;
 :PALETTE DAT 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
@@ -2796,14 +2796,14 @@ SET PC, POP
 :DISCMSGCODE DAT 0x0
 ;
 :DISCSTATECODE DAT 0x0
-:DISCFSCODE DAT 0x0 ; 0-неизв.
+:DISCFSCODE DAT 0x0 ; 0-unknown.
 :DISCERRORCODE DAT 0x0
 ;
 :FILENAME DAT 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 ;
 :null_end
 ;
-:CUSTOMNUMBERS DAT 0x3c42, 0x423c, 0x44, 0x7e40, 0x4462, 0x524c, 0x2249, 0x4936, 0xe08, 0x7e00, 0x4e, 0x4a32, 0x3c4a, 0x4a30, 0x272, 0xa06, 0x3649, 0x4936, 0xc52, 0x523c;цифры. ручная работа!
+:CUSTOMNUMBERS DAT 0x3c42, 0x423c, 0x44, 0x7e40, 0x4462, 0x524c, 0x2249, 0x4936, 0xe08, 0x7e00, 0x4e, 0x4a32, 0x3c4a, 0x4a30, 0x272, 0xa06, 0x3649, 0x4936, 0xc52, 0x523c;digits. handmade!
 ;
 :STARTSCREEN DAT 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0xcf00 0xcf10 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x4f00 0x4f02 0x4f03 0x2f05 0xcf21 0xcf0f 0xcf12 0xcf0e 0xcf0d 0xdf13 0xdf14 0x4f15 0x0f00 0x2f00 0x2f19 0x2f1a 0x2f1d 0xcf20 0xcf1f 0xcf22 0xdf23 0xdf26 0xdf24 0x4f28 0x4f29 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x4f00 0x4f06 0x4f04 0x2f09 0xcf0a 0xcf0e 0xcf0c 0xcf0f 0xcf12 0xdf0b 0xdf11 0x4f16 0x4f17 0x2f19 0x2f18 0x2f1b 0x2f1c 0x2f1d 0xcf1e 0xdf00 0xdf27 0xdf17 0xdf25 0x4f73 0x4f2a 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f07 0x0f2c 0x0f2d 0x0f2e 0x0f2f 0x0f30 0x0f2c 0x0f31 0x0f32 0x0f33 0x0f34 0x0f35 0x0f36 0x0f37 0x0f38 0x0f39 0x0f3a 0x0f3b 0x0f3c 0x0f2b 0x0f2b 0x0f3f 0x0f3e 0x0f3d 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f67 0x0f69 0x0f69 0x0f69 0x0f69 0x0f69 0x0f69 0x0f61 0x0f69 0x0f69 0x0f69 0x0f69 0x0f69 0x0f69 0x0f61 0x0f69 0x0f69 0x0f69 0x0f69 0x0f69 0x0f69 0x0f61 0x0f69 0x0f69 0x0f69 0x0f69 0x0f69 0x0f69 0x0f69 0x0f66 0x0f00 0x0f00 0x0f65 0x0400 0x8f00 0x2f46 0x2f45 0x8f00 0x8f00 0x0f65 0x8400 0x8f47 0x8f48 0x8f49 0x8f4a 0x8f4b 0x0f65 0x8400 0x8f00 0x1f54 0x1f58 0x1f59 0x8f00 0x0f65 0x8400 0x8f00 0x8f64 0x8f63 0x8f64 0x0f00 0x0f00 0x0f65 0x0f00 0x0f00 0x0f65 0x0f00 0x0f40 0x0f41 0x0f42 0x0f43 0x0f44 0x0f65 0x0f4c 0x0f42 0x0f4d 0x0f4e 0x0f4f 0x0f50 0x0f65 0x0f00 0x0f51 0x0f52 0x0f53 0x0f7b 0x0f00 0x0f65 0x0f5a 0x0f5b 0x0f5c 0x0f5d 0x0f5e 0x0f5b 0x0f5f 0x0f62 0x0f00 0x0f00 0x0f6a 0x0f68 0x0f68 0x0f68 0x0f68 0x0f68 0x0f68 0x0f68 0x0f68 0x0f68 0x0f68 0x0f68 0x0f68 0x0f68 0x0f68 0x0f68 0x0f68 0x0f68 0x0f68 0x0f68 0x0f68 0x0f68 0x0f68 0x0f68 0x0f68 0x0f68 0x0f68 0x0f68 0x0f68 0x0f60 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f7a 0x0f79 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f70 0x0f6e 0xcf6f 0xcf72 0xcf72 0xcf72 0xcf72 0xcf00 0xcf72 0xcf72 0xcf72 0xcf72 0x0f00 0x0f00 0x0f00 0x0f21 0x0f77 0x0f78 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f00 0x0f57 0x0f57 0x0f57 0x0f57 0x0f57 0x0f71 0x0f6d 0x0f6c 0x0f6b 0x0f57 0x0f57 0x0f57 0x0f57 0x0f57 0x0f57 0x0f57 0x0f57 0x0f57 0x0f57 0x0f57 0x0f57 0x0f76 0x0f75 0x0f74 0x0f57 0x0f57 0x0f7d 0x0f55 0x0f01 0x0f7c 0x0f08 0x0f7e 0x0f56 0x0056 0x0156 0x0256 0x0356 0x0456 0x0556 0x0656 0x0756 0x0856 0x0956 0x0a56 0x0b56 0x0c56 0x0d56 0x0e56 0x0f56 0x0056 0x0156 0x0256 0x0356 0x0456 0x0556 0x0656 0x0756 0x0856 0x0956 0x0a56 0x0b56 0x0c56 0x0d56 0x0e56
 ;
